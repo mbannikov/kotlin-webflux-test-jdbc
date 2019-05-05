@@ -1,7 +1,6 @@
 package ru.mbannikov.webfluxtestjdbc.domain
 
 import ru.mbannikov.webfluxtestjdbc.refs.UserId
-import java.lang.RuntimeException
 
 interface UserRepository {
     //** Read part **//
@@ -15,9 +14,4 @@ interface UserRepository {
     //** Write part **//
     fun create(user: User): User
     fun save(user: User): User
-}
-
-class UserNotFoundException : RuntimeException {
-    constructor(userId: UserId) : super("User with id ${userId.value} not found")
-    constructor(username: Username) : super("User with username ${username.value} not found")
 }
