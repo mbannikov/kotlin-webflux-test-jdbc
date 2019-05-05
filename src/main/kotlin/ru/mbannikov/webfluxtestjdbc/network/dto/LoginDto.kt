@@ -6,3 +6,13 @@ data class LoginDto(
 )
 
 typealias LoginRequest = LoginDto
+
+data class LoginSuccessResponse(
+    val status: String,
+    val token: String
+)
+
+data class LoginFailResponse(
+    val status: String,
+    val message: String? = null
+)
