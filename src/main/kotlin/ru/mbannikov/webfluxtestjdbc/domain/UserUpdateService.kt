@@ -10,7 +10,7 @@ class UserUpdateService(
     fun updateEmail(user: User, newEmail: String): User {
         return userRepository.getBy(user.id)
             .copy(email = newEmail)
-            .also(userRepository::save)
+            .let(userRepository::save)
     }
 
     fun updatePassword(user: User, password: String, newPassword: String, confirmPassword: String): User {
@@ -21,6 +21,6 @@ class UserUpdateService(
 
         return userRepository.getBy(user.id)
             .copy(password = passwordEncoder.encode(newPassword))
-            .also(userRepository::save)
+            .let(userRepository::save)
     }
 }

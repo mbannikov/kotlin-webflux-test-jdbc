@@ -1,9 +1,13 @@
 package ru.mbannikov.webfluxtestjdbc
 
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder
 import reactor.netty.http.server.HttpServer
+import ru.mbannikov.webfluxtestjdbc.infrastructure.UserTable
 
 class Server(
     host: String = "localhost",
@@ -31,5 +35,11 @@ class Server(
 }
 
 fun main() {
+    Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
+
+    transaction {
+        SchemaUtils.create(UserTable)
+    }
+
     Server().start()
 }

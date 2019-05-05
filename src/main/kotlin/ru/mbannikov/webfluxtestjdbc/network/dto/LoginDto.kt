@@ -4,3 +4,5 @@ data class LoginDto(
     val email: String,
     val password: String
 )
+
+typealias LoginRequest = LoginDto

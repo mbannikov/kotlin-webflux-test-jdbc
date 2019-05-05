@@ -14,7 +14,7 @@ interface UserRepository {
 
     //** Write part **//
     fun create(user: User): User
-    fun save(user: User)
+    fun save(user: User): User
 }
 
 class UserNotFoundException : RuntimeException {
