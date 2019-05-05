@@ -31,5 +31,6 @@ class UserHandler(
         return request.bodyToMono(RegisterRequest::class.java)
             .flatMap { registerService.register(Username(it.username), it.email, it.password).toMono() }
             .flatMap { ServerResponse.ok().syncBody(successResponse) }
+            .onErrorResume { ServerResponse.ok().syncBody(RegisterResponse(FAIL_STATUS, "Error during registration")) }
     }
 }
