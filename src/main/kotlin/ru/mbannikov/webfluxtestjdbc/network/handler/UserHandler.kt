@@ -15,8 +15,10 @@ class UserHandler(
     private val authenticationService: UserAuthenticationService,
     private val registerService: UserRegisterService
 ) {
-    private val SUCCESS_STATUS = "success"
-    private val FAIL_STATUS = "fail"
+    companion object {
+        private const val SUCCESS_STATUS = "success"
+        private const val FAIL_STATUS = "fail"
+    }
 
     private val successResponse = RegisterResponse(SUCCESS_STATUS)
 
