@@ -1,5 +1,6 @@
 package ru.mbannikov.webfluxtestjdbc.network.handler
 
+import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -11,6 +12,9 @@ import ru.mbannikov.webfluxtestjdbc.domain.UserExistsException
 import ru.mbannikov.webfluxtestjdbc.domain.UserRegisterService
 import ru.mbannikov.webfluxtestjdbc.domain.Username
 import ru.mbannikov.webfluxtestjdbc.network.dto.*
+import ru.mbannikov.webfluxtestjdbc.utils.logRequest
+
+private val logger = KotlinLogging.logger("UserHandler")
 
 class UserHandler(
     private val authenticationService: UserAuthenticationService,
@@ -25,6 +29,7 @@ class UserHandler(
 
     fun login(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(LoginRequest::class.java)
+            .doOnNext { logRequest(logger, request, it) }
             .flatMap { authenticationService.authenticate(it.email, it.password).toMono() }
             .flatMap { ServerResponse.ok().syncBody(LoginSuccessResponse(SUCCESS_STATUS, "some_jwt_token")) }
             .onErrorResume {
@@ -34,11 +39,11 @@ class UserHandler(
                 }
                 ServerResponse.status(HttpStatus.UNAUTHORIZED).syncBody(LoginFailResponse(FAIL_STATUS, responseMessage))
             }
-
     }
 
     fun register(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(RegisterRequest::class.java)
+            .doOnNext { logRequest(logger, request, it) }
             .flatMap { registerService.register(Username(it.username), it.email, it.password).toMono() }
             .flatMap { ServerResponse.ok().syncBody(successResponse) }
             .onErrorResume {
