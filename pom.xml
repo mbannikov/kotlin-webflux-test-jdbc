@@ -18,9 +18,11 @@
         <spring.version>5.1.5.RELEASE</spring.version>
         <netty.version>0.8.6.RELEASE</netty.version>
         <exposed.version>0.13.2</exposed.version>
+        <postgres.version>42.2.5</postgres.version>
         <jackson.version>2.9.8</jackson.version>
         <junit.version>4.12</junit.version>
         <self4j.version>1.7.26</self4j.version>
+        <logging.version>1.6.26</logging.version>
     </properties>
 
     <repositories>
@@ -41,6 +43,11 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
             <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging</artifactId>
+            <version>${logging.version}</version>
         </dependency>
 
         <dependency>
@@ -68,6 +75,11 @@
             <groupId>org.jetbrains.exposed</groupId>
             <artifactId>exposed</artifactId>
             <version>${exposed.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
         </dependency>
 
         <dependency>

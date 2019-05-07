@@ -35,7 +35,12 @@ class Server(
 }
 
 fun main() {
-    Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
+    Database.connect(
+        url = "jdbc:postgresql://localhost:5432/fluxjdbc",
+        driver = "org.postgresql.Driver",
+        user = "postgres",
+        password = "postgres"
+    )
 
     transaction {
         SchemaUtils.create(UserTable)
