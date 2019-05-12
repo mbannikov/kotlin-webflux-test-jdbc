@@ -8,6 +8,7 @@ import org.springframework.web.server.adapter.WebHttpHandlerBuilder
 import ru.mbannikov.webfluxtestjdbc.domain.UserAuthenticationService
 import ru.mbannikov.webfluxtestjdbc.domain.UserRegisterService
 import ru.mbannikov.webfluxtestjdbc.domain.UserRepository
+import ru.mbannikov.webfluxtestjdbc.infrastructure.NonBlockingSqlUserRepository
 import ru.mbannikov.webfluxtestjdbc.infrastructure.SqlUserRepository
 import ru.mbannikov.webfluxtestjdbc.network.Routes
 import ru.mbannikov.webfluxtestjdbc.network.handler.ProfileHandler
@@ -32,5 +33,10 @@ fun beans() = beans {
     bean<UserRegisterService>()
 
     /** Repositories **/
-    bean<UserRepository> { SqlUserRepository() }
+    bean<SqlUserRepository>()
+    bean<NonBlockingSqlUserRepository>()
+    bean<UserRepository> {
+        ref<SqlUserRepository>()
+//        ref<NonBlockingSqlUserRepository>()
+    }
 }
