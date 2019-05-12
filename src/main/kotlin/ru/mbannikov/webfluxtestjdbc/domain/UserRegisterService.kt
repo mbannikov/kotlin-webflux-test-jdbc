@@ -1,27 +1,26 @@
 package ru.mbannikov.webfluxtestjdbc.domain
 
 import org.springframework.security.crypto.password.PasswordEncoder
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
+import reactor.core.publisher.switchIfEmpty
 
 class UserRegisterService(
     private val passwordEncoder: PasswordEncoder,
     private val userRepository: UserRepository
 ) {
-    fun register(username: Username, email: String, password: String): User {
-        checkExistence(username)
-        checkExistence(email)
+    fun register(username: Username, email: String, password: String): Mono<User> {
+        val byUsername = userRepository.findBy(username)
+            .flatMap { Mono.error<User>(UserExistsException(username)) }
 
-        val user = User(
-            username = username,
-            password = passwordEncoder.encode(password),
-            email = email
-        )
+        val byEmail = userRepository.findByEmail(email)
+            .flatMap { Mono.error<User>(UserExistsException(email)) }
 
-        return userRepository.create(user)
+        return Flux.merge(byUsername, byEmail)
+            .singleOrEmpty()
+            .switchIfEmpty {
+                val user = User(username = username, password = passwordEncoder.encode(password), email = email)
+                userRepository.create(user)
+            }
     }
-
-    private fun checkExistence(username: Username) =
-        userRepository.findBy(username)?.let { throw UserExistsException(username) }
-
-    private fun checkExistence(email: String) =
-        userRepository.findByEmail(email)?.let { throw UserExistsException(email) }
 }

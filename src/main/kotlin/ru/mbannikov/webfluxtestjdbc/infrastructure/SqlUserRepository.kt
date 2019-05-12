@@ -3,38 +3,40 @@ package ru.mbannikov.webfluxtestjdbc.infrastructure
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
+import reactor.core.publisher.Mono
+import reactor.core.publisher.toMono
 import ru.mbannikov.webfluxtestjdbc.domain.User
 import ru.mbannikov.webfluxtestjdbc.domain.UserRepository
 import ru.mbannikov.webfluxtestjdbc.domain.Username
 import ru.mbannikov.webfluxtestjdbc.refs.UserId
 
 class SqlUserRepository : UserRepository {
-    override fun findBy(userId: UserId): User? = transaction {
+    override fun findBy(userId: UserId): Mono<User> = transaction {
         UserTable.select { UserTable.id eq userId.value }.singleOrNull()?.toUser()
-    }
+    }?.toMono() ?: Mono.empty()
 
-    override fun findBy(username: Username): User? = transaction {
+    override fun findBy(username: Username): Mono<User> = transaction {
         UserTable.select { UserTable.username eq username.value }.singleOrNull()?.toUser()
-    }
+    }?.toMono() ?: Mono.empty()
 
-    override fun findByEmail(email: String): User? = transaction {
+    override fun findByEmail(email: String): Mono<User> = transaction {
         UserTable.select { UserTable.email eq email }.singleOrNull()?.toUser()
-    }
+    }?.toMono() ?: Mono.empty()
 
-    override fun create(user: User): User = transaction {
+    override fun create(user: User): Mono<User> = transaction {
         UserTable.insert { it.from(user) }
             .get(UserTable.id)
             .let { requireNotNull(it) }
             .let { user.copy(id = it.toUserId()) }
-    }
+    }.toMono()
 
-    override fun save(user: User): User = transaction {
+    override fun save(user: User): Mono<User> = transaction {
         user.apply {
             UserTable.update({ UserTable.id eq user.id.value }) {
                 it.from(user)
             }
         }
-    }
+    }.toMono()
 }
 
 object UserTable : Table("users") {
