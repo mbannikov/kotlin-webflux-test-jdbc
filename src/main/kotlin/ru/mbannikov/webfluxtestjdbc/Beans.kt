@@ -5,9 +5,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder
-import ru.mbannikov.webfluxtestjdbc.domain.UserAuthenticationService
-import ru.mbannikov.webfluxtestjdbc.domain.UserRegisterService
-import ru.mbannikov.webfluxtestjdbc.domain.UserRepository
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserAuthenticationService
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserRegisterService
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserRepository
 import ru.mbannikov.webfluxtestjdbc.infrastructure.NonBlockingSqlUserRepository
 import ru.mbannikov.webfluxtestjdbc.infrastructure.SqlUserRepository
 import ru.mbannikov.webfluxtestjdbc.network.Routes

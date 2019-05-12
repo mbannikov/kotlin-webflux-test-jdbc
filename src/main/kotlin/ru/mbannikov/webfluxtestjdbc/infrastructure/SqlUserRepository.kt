@@ -5,9 +5,9 @@ import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.jetbrains.exposed.sql.transactions.transaction
 import reactor.core.publisher.Mono
 import reactor.core.publisher.toMono
-import ru.mbannikov.webfluxtestjdbc.domain.User
-import ru.mbannikov.webfluxtestjdbc.domain.UserRepository
-import ru.mbannikov.webfluxtestjdbc.domain.Username
+import ru.mbannikov.webfluxtestjdbc.domain.user.User
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserRepository
+import ru.mbannikov.webfluxtestjdbc.domain.user.Username
 import ru.mbannikov.webfluxtestjdbc.refs.UserId
 
 class SqlUserRepository : UserRepository {
@@ -61,4 +61,5 @@ private fun UpdateBuilder<Any>.from(user: User) {
 
 private fun Long.toUserId(): UserId = UserId.Persisted(this)
 
-private fun String.toUsername(): Username = Username(this)
+private fun String.toUsername(): Username =
+    Username(this)

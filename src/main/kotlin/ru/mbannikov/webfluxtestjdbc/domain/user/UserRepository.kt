@@ -1,4 +1,4 @@
-package ru.mbannikov.webfluxtestjdbc.domain
+package ru.mbannikov.webfluxtestjdbc.domain.user
 
 import reactor.core.publisher.Mono
 import reactor.core.publisher.switchIfEmpty
@@ -10,8 +10,12 @@ interface UserRepository {
     fun findBy(username: Username): Mono<User>
     fun findByEmail(email: String): Mono<User>
 
-    fun getBy(userId: UserId): Mono<User> = findBy(userId).switchIfEmpty { Mono.error(UserNotFoundException(userId)) }
-    fun getBy(username: Username): Mono<User> = findBy(username).switchIfEmpty { Mono.error(UserNotFoundException(username)) }
+    fun getBy(userId: UserId): Mono<User> = findBy(userId).switchIfEmpty { Mono.error(
+        UserNotFoundException(userId)
+    ) }
+    fun getBy(username: Username): Mono<User> = findBy(username).switchIfEmpty { Mono.error(
+        UserNotFoundException(username)
+    ) }
 
     //** Write part **//
     fun create(user: User): Mono<User>

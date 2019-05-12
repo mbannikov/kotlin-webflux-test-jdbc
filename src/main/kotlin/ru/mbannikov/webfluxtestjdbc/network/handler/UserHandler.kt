@@ -7,10 +7,10 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 import reactor.core.publisher.toMono
-import ru.mbannikov.webfluxtestjdbc.domain.UserAuthenticationService
-import ru.mbannikov.webfluxtestjdbc.domain.UserExistsException
-import ru.mbannikov.webfluxtestjdbc.domain.UserRegisterService
-import ru.mbannikov.webfluxtestjdbc.domain.Username
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserAuthenticationService
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserExistsException
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserRegisterService
+import ru.mbannikov.webfluxtestjdbc.domain.user.Username
 import ru.mbannikov.webfluxtestjdbc.network.dto.*
 import ru.mbannikov.webfluxtestjdbc.utils.logRequest
 

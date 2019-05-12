@@ -1,4 +1,4 @@
-package ru.mbannikov.webfluxtestjdbc.domain
+package ru.mbannikov.webfluxtestjdbc.domain.user
 
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.crypto.password.PasswordEncoder

@@ -2,9 +2,9 @@ package ru.mbannikov.webfluxtestjdbc.infrastructure
 
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
-import ru.mbannikov.webfluxtestjdbc.domain.User
-import ru.mbannikov.webfluxtestjdbc.domain.UserRepository
-import ru.mbannikov.webfluxtestjdbc.domain.Username
+import ru.mbannikov.webfluxtestjdbc.domain.user.User
+import ru.mbannikov.webfluxtestjdbc.domain.user.UserRepository
+import ru.mbannikov.webfluxtestjdbc.domain.user.Username
 import ru.mbannikov.webfluxtestjdbc.refs.UserId
 
 class NonBlockingSqlUserRepository(

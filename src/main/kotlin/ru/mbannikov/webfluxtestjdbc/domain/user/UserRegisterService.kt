@@ -1,4 +1,4 @@
-package ru.mbannikov.webfluxtestjdbc.domain
+package ru.mbannikov.webfluxtestjdbc.domain.user
 
 import org.springframework.security.crypto.password.PasswordEncoder
 import reactor.core.publisher.Flux
@@ -11,15 +11,27 @@ class UserRegisterService(
 ) {
     fun register(username: Username, email: String, password: String): Mono<User> {
         val byUsername = userRepository.findBy(username)
-            .flatMap { Mono.error<User>(UserExistsException(username)) }
+            .flatMap { Mono.error<User>(
+                UserExistsException(
+                    username
+                )
+            ) }
 
         val byEmail = userRepository.findByEmail(email)
-            .flatMap { Mono.error<User>(UserExistsException(email)) }
+            .flatMap { Mono.error<User>(
+                UserExistsException(
+                    email
+                )
+            ) }
 
         return Flux.merge(byUsername, byEmail)
             .singleOrEmpty()
             .switchIfEmpty {
-                val user = User(username = username, password = passwordEncoder.encode(password), email = email)
+                val user = User(
+                    username = username,
+                    password = passwordEncoder.encode(password),
+                    email = email
+                )
                 userRepository.create(user)
             }
     }

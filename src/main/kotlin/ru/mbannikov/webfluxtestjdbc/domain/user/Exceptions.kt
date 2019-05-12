@@ -1,4 +1,4 @@
-package ru.mbannikov.webfluxtestjdbc.domain
+package ru.mbannikov.webfluxtestjdbc.domain.user
 
 import ru.mbannikov.webfluxtestjdbc.refs.UserId
 
