@@ -1,5 +1,7 @@
 package ru.mbannikov.webfluxtestjdbc
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -38,13 +40,40 @@ class Server(
     }
 }
 
-fun main() {
+fun hikariConnect(url: String, driver: String, user: String, pwd: String): Database {
+    val hikariConfig = HikariConfig().apply {
+        jdbcUrl = url
+        driverClassName = driver
+        username = user
+        password = pwd
+    }
+
+    val datasource = HikariDataSource(hikariConfig)
+
+    return Database.connect(datasource)
+}
+
+fun simpleConnect(url: String, driver: String, user: String, pwd: String): Database =
     Database.connect(
-        url = "jdbc:postgresql://postgres:5432/fluxjdbc",
-        driver = "org.postgresql.Driver",
-        user = "postgres",
-        password = "postgres"
+        url = url,
+        driver = driver,
+        user = user,
+        password = pwd
     )
+
+fun main() {
+    System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
+
+    val jdbcUrl = "jdbc:postgresql://postgres:5432/fluxjdbc"
+    val jdbcDriver = "org.postgresql.Driver"
+    val dbUsername = "postgres"
+    val dbPassword = "postgres"
+
+    val USE_HIKARI = false
+    when (USE_HIKARI) {
+        true -> hikariConnect(jdbcUrl, jdbcDriver, dbUsername, dbPassword)
+        false -> simpleConnect(jdbcUrl, jdbcDriver, dbUsername, dbPassword)
+    }
 
     transaction {
         SchemaUtils.create(UserTable)

@@ -33,10 +33,11 @@ fun beans() = beans {
     bean<UserRegisterService>()
 
     /** Repositories **/
-    bean<SqlUserRepository>()
-    bean<NonBlockingSqlUserRepository>()
     bean<UserRepository> {
-        ref<SqlUserRepository>()
-//        ref<NonBlockingSqlUserRepository>()
+        SqlUserRepository()
+
+//        NonBlockingSqlUserRepository(
+//            SqlUserRepository()
+//        )
     }
 }
