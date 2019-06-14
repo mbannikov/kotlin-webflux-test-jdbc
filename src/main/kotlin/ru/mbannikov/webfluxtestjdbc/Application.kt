@@ -1,28 +1,32 @@
 package ru.mbannikov.webfluxtestjdbc
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
 import mu.KotlinLogging
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder
 import reactor.netty.http.server.HttpServer
-import ru.mbannikov.webfluxtestjdbc.infrastructure.UserTable
+import java.lang.IllegalArgumentException
 
 private val logger = KotlinLogging.logger("Application")
 
+enum class RepositoryType {
+    PG_EXPOSED,
+    PG_EXPOSED_NON_BLOCKING,
+    PG_HIKARI,
+    PG_HIKARI_NON_BLOCKING,
+    MONGO
+}
+
 class Server(
     host: String = "0.0.0.0",
-    port: Int = 8080
+    port: Int = 8080,
+    userRepoType: RepositoryType
 ) {
     private val server: HttpServer
 
     init {
         val context = GenericApplicationContext {
-            beans().initialize(this)
+            beans(userRepoType).initialize(this)
             refresh()
         }
         val handler = WebHttpHandlerBuilder.applicationContext(context).build()
@@ -40,44 +44,25 @@ class Server(
     }
 }
 
-fun hikariConnect(url: String, driver: String, user: String, pwd: String): Database {
-    val hikariConfig = HikariConfig().apply {
-        jdbcUrl = url
-        driverClassName = driver
-        username = user
-        password = pwd
-    }
-
-    val datasource = HikariDataSource(hikariConfig)
-
-    return Database.connect(datasource)
+private fun printHelp(): Nothing {
+    val types = RepositoryType.values().joinToString(", ")
+    println("./app TYPE\nTypes: $types")
+    
+    return System.exit(1) as Nothing
 }
 
-fun simpleConnect(url: String, driver: String, user: String, pwd: String): Database =
-    Database.connect(
-        url = url,
-        driver = driver,
-        user = user,
-        password = pwd
-    )
+fun main(args: Array<String>) {
+    if (args.size != 1) {
+        printHelp()
+    }
 
-fun main() {
     System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
 
-    val jdbcUrl = "jdbc:postgresql://postgres:5432/fluxjdbc"
-    val jdbcDriver = "org.postgresql.Driver"
-    val dbUsername = "postgres"
-    val dbPassword = "postgres"
-
-    val USE_HIKARI = false
-    when (USE_HIKARI) {
-        true -> hikariConnect(jdbcUrl, jdbcDriver, dbUsername, dbPassword)
-        false -> simpleConnect(jdbcUrl, jdbcDriver, dbUsername, dbPassword)
+    val type = try {
+        RepositoryType.valueOf(args[0].toUpperCase())
+    } catch (ex: IllegalArgumentException) {
+        printHelp()
     }
 
-    transaction {
-        SchemaUtils.create(UserTable)
-    }
-
-    Server().start()
+    Server(userRepoType = type).start()
 }
