@@ -47,14 +47,13 @@ class Server(
 private fun printHelp(): Nothing {
     val types = RepositoryType.values().joinToString(", ")
     println("./app TYPE\nTypes: $types")
-    
+
     return System.exit(1) as Nothing
 }
 
 fun main(args: Array<String>) {
-    if (args.size != 1) {
+    if (args.size != 1)
         printHelp()
-    }
 
     System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE")
 
