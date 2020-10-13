@@ -21,7 +21,7 @@
         <exposed.version>0.13.2</exposed.version>
         <postgres.version>42.2.5</postgres.version>
         <jackson.version>2.9.8</jackson.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <self4j.version>1.7.26</self4j.version>
         <logging.version>1.6.26</logging.version>
     </properties>
