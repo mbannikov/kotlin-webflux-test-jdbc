@@ -19,7 +19,7 @@
         <spring.version>5.1.5.RELEASE</spring.version>
         <netty.version>0.8.6.RELEASE</netty.version>
         <exposed.version>0.13.2</exposed.version>
-        <postgres.version>42.2.5</postgres.version>
+        <postgres.version>42.2.25</postgres.version>
         <jackson.version>2.9.8</jackson.version>
         <junit.version>4.12</junit.version>
         <self4j.version>1.7.26</self4j.version>
